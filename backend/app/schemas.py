@@ -28,6 +28,12 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class VersionedPayload(EntryPayload):
+    """带版本号的保存请求：乐观并发控制，版本对不上说明别的窗口先落库了。"""
+
+    version: int = 0
+
+
 
 class FlightstandEntry(BaseModel):
     """机位明细结构。"""

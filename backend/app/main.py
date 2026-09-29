@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import ROUTERS
+from app.routers.baggage import service as baggage_service
 from app.store import store
 
 app = FastAPI(title="机场地面保障管理平台", version="1.0.0")
@@ -34,5 +35,5 @@ def health() -> dict[str, object]:
 
 @app.get("/api/overview")
 def overview() -> dict[str, object]:
-    """运营概览：把各业务模块的待处理量汇总成看板卡片。"""
-    return store.overview()
+    """运营概览：行李装卸的计数与转盘矩阵同源，其余模块走通用汇总。"""
+    return store.overview(summaries={"baggage": baggage_service.overview_summary()})

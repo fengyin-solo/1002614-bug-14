@@ -27,9 +27,14 @@ class Store:
                 return row
         return None
 
-    def overview(self) -> dict[str, object]:
+    def overview(self, summaries: dict[str, dict[str, int]] | None = None) -> dict[str, object]:
+        """汇总各模块计数；summaries 里的模块用模块自己的口径，保证和它的专用视图同源。"""
+        summaries = summaries or {}
         modules: list[dict[str, object]] = []
         for name in self.module_names():
+            if name in summaries:
+                modules.append({"name": name, **summaries[name]})
+                continue
             rows = self.rows(name)
             modules.append({
                 "name": name,
